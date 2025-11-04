@@ -18,6 +18,33 @@ app.get("/", (req, res) => {
     res.send("Home Route!!");
 })
 
+// Get all persons
+app.get("/person", async (req, res) => {
+    try {
+        const people = await Person.find();  // fetch all documents
+        res.json(people);  // send them as JSON
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
+// Get person by ID
+app.get("/person/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const person = await Person.findById(id); // find document by its ObjectId
+
+        if (!person) {
+            return res.status(404).send("Person not found");
+        }
+
+        res.json(person);
+    } catch (error) {
+        res.status(400).send("Invalid ID or error fetching data");
+    }
+});
+
+
 // Add user
 app.post("/person", async (req, res) => {
     try {
